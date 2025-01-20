@@ -2,12 +2,9 @@
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from './components/HelloWorld.vue'
 
-import { reactive } from 'vue'
-const user = reactive({ username: '', password: '' })
-function login(user) {
-  console.log(user)
-}
-const loggedIn = true
+defineProps({
+  loggedIn: false,
+})
 </script>
 
 <template>
