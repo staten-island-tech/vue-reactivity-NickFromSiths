@@ -9,15 +9,12 @@ defineProps({
 
 <template>
   <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <HelloWorld msg="Vue Project" />
+    <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" /> -->
+    <HelloWorld msg="Aim" />
 
     <nav>
-      <RouterLink v-if="loggedIn === false" to="/">Log In</RouterLink>
-      <RouterLink v-if="loggedIn === false" to="/about">About</RouterLink>
-      <RouterLink v-if="loggedIn === true" to="/account">Account</RouterLink>
-      <RouterLink v-if="loggedIn === true" to="/about">About</RouterLink>
+      <RouterLink to="/">Home</RouterLink>
+      <RouterLink to="/about">About</RouterLink>
     </nav>
   </header>
 
@@ -34,9 +31,7 @@ nav {
   width: 100%;
   text-align: center;
   font-size: 1rem;
-  margin-top: 2rem;
   padding: 1rem 0;
-  margin-top: 1rem;
 }
 
 nav a.router-link-exact-active {
