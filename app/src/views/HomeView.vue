@@ -1,40 +1,20 @@
 <script setup>
 import AimPractice from '@/components/AimPractice.vue'
 import ReactionTest from '@/components/ReactionTest.vue'
-// import { reactive } from 'vue'
-// const user = reactive({ username: '', password: '' })
-// function login(user) {
-//   console.log(user)
-// }
-// const component = false
-export default {
-  data() {
-    return {
-      showComponent: true,
-    }
-  },
-  methods: {
-    toggleComponent() {
-      this.showComponent = !this.showComponent
-    },
-  },
-  components: {
-    AimPractice,
-    ReactionTest,
-  },
-}
+
+const toggle = true
+const togle = false
 </script>
 
 <template>
   <div class="main">
     <div class="nav">
-      <button @click="toggleComponent"><h1>Aim</h1></button>
-      <button @click="toggleComponent"><h1>Reaction</h1></button>
+      <button @click="toggle = !toggle"><h1>Aim</h1></button>
+      <button @click="togle = !togle"><h1>Reaction</h1></button>
     </div>
     <div class="center">
-      <AimPractice />
-      <ReactionTest />
-
+      <AimPractice v-if="toggle" />
+      <ReactionTest v-if="togle" />
       <div class="scores">High Scores</div>
     </div>
   </div>
@@ -83,35 +63,3 @@ export default {
   background-color: rgb(67, 247, 187);
 }
 </style>
-
-<!-- <main>
-  <h1>Log In</h1>
-  <form action="submit" @submit.prevent="login()">
-    <label for="username">Username</label>
-    <input type="text" v-model="user.username" />
-    <label for="password">Password</label>
-    <input type="password" v-model="user.password" />
-    <button type="submit">Submit</button>
-  </form>
-</main> -->
-<template>
-  <div>
-    <button @click="toggleComponent">Toggle Component</button>
-    <component-one v-if="showComponent" />
-    <component-two v-else />
-  </div>
-</template>
-
-<script setup>
-import { ref } from 'vue' // Import Vue's `ref` for reactivity
-import ComponentOne from '@/components/ComponentOne.vue' // Adjust the path as needed
-import ComponentTwo from '@/components/ComponentTwo.vue' // Adjust the path as needed
-
-// Define reactive state
-const showComponent = ref(true)
-
-// Define method
-const toggleComponent = () => {
-  showComponent.value = !showComponent.value
-}
-</script>
