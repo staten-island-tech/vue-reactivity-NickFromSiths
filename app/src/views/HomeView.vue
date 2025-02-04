@@ -2,18 +2,19 @@
 import AimPractice from '@/components/AimPractice.vue'
 import ReactionTest from '@/components/ReactionTest.vue'
 
-const toggle = true
-const togle = false
+// const toggle = true
+// const togle = false
+//@click="toggle = !toggle"
 </script>
 
 <template>
   <div class="main">
     <div class="nav">
-      <button @click="toggle = !toggle"><h1>Aim</h1></button>
-      <button @click="togle = !togle"><h1>Reaction</h1></button>
+      <button><h3>Aim Test</h3></button>
+      <button><h3>Reaction Test</h3></button>
     </div>
     <div class="center">
-      <AimPractice v-if="toggle" />
+      <AimPractice />
       <ReactionTest v-if="togle" />
       <div class="scores">High Scores</div>
     </div>
