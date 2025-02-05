@@ -1,13 +1,22 @@
 <template>
-  <div class="game" @click="missed++">
-    <button class="aim">{{ missed }}</button>
+  <div class="game" @click="(missed++, console.log(randomX, randomY))">
+    <button class="aim" @click="handleClick" :style="{ top: randomY + '%', left: randomX + '%' }">
+      {{ clicked }}
+    </button>
   </div>
 </template>
 
 <script setup>
-const missed = 0
-const randomX = Math.random() * 100
-const randomY = Math.random() * 100
+import { ref } from 'vue'
+let missed = ref(0)
+let clicked = ref(0)
+let randomX = null
+let randomY = null
+function handleClick() {
+  clicked.value++
+  randomX = Math.random() * 100
+  randomY = Math.random() * 100
+}
 </script>
 
 <style scoped>
@@ -16,9 +25,7 @@ const randomY = Math.random() * 100
   background-color: rgb(186, 255, 232);
 }
 .aim {
-  position: absolute;
-  top: randomX;
-  left: randomY;
+  position: relative;
   width: 1.7rem;
   height: 1.7rem;
   border-radius: 100%;

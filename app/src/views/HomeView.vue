@@ -15,7 +15,7 @@ import ReactionTest from '@/components/ReactionTest.vue'
     </div>
     <div class="center">
       <AimPractice />
-      <ReactionTest v-if="togle" />
+      <ReactionTest />
       <div class="scores">High Scores</div>
     </div>
   </div>
