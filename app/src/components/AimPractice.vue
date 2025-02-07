@@ -6,8 +6,10 @@
         <div class="stat">Right: {{ clicked }}</div>
         <div class="stat">Missed: {{ missed }}</div>
       </div>
+      <div class="start" @click="random"></div>
       <div class="offset" @click="(missed++, console.log(randomX, randomY))">
         <button
+          v-if="active"
           class="aim"
           @click="handleClick"
           :style="{ top: randomY + '%', left: randomX + '%' }"
@@ -23,13 +25,20 @@ let missed = ref(0)
 let clicked = ref(0)
 let randomX = null
 let randomY = null
+let active = ref(true)
 
 function handleClick(event) {
   event.stopPropagation()
   clicked.value++
+  random()
+}
+function random() {
   randomX = Math.random() * 100
   randomY = Math.random() * 100
 }
+setTimeout(() => {
+  active.value = false
+}, 15000)
 </script>
 
 <style scoped>
@@ -40,11 +49,16 @@ function handleClick(event) {
 .contains {
   height: 100%;
 }
+.start {
+  height: 100%;
+  width: 100%;
+  z-index: 11;
+}
 .stats {
   height: 1.4rem;
   display: flex;
   flex-direction: row;
-  align-items: center;
+  place-content: center;
 }
 .stat {
   margin: 0rem 2rem 0rem 2rem;
@@ -55,6 +69,7 @@ function handleClick(event) {
   height: 3rem;
   border-radius: 100%;
   z-index: 10;
+  transition: 0.5s;
 }
 .offset {
   margin: 0.5rem;
