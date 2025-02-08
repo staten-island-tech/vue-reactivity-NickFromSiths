@@ -1,13 +1,19 @@
 <template>
   <div class="game">
     <div class="contains">
-      <div class="stats">
+      <div v-if="!active" class="start" @click="startGame">
+        <h1 v-if="!history.attempt">Click to Start</h1>
+        <h1 v-if="history.attempt">
+          Attempt:{{ history.attempt }} Accuracy:{{ history.accuracy }}
+        </h1>
+      </div>
+      <div class="stats" v-if="active">
         <div class="stat">Accuracy: {{ ((clicked / (clicked + missed)) * 100).toFixed(1) }}%</div>
         <div class="stat">Right: {{ clicked }}</div>
         <div class="stat">Missed: {{ missed }}</div>
       </div>
-      <div class="start" @click="random"></div>
-      <div class="offset" @click="(missed++, console.log(randomX, randomY))">
+
+      <div class="offset" v-if="active" @click="(missed++, console.log(randomX, randomY))">
         <button
           v-if="active"
           class="aim"
@@ -17,39 +23,77 @@
       </div>
     </div>
   </div>
+  <div class="scores"><h3>High Scores</h3></div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
+
 let missed = ref(0)
 let clicked = ref(0)
 let randomX = null
 let randomY = null
-let active = ref(true)
+let active = ref(false)
+const history = reactive({ attempt: null, accuracy: null }) // Null to check before game starts
+let attempt = ref(1)
+let gameOver = ref(false) // Prevent restart before 1 second
 
 function handleClick(event) {
   event.stopPropagation()
   clicked.value++
   random()
 }
+
 function random() {
   randomX = Math.random() * 100
   randomY = Math.random() * 100
 }
-setTimeout(() => {
-  active.value = false
-}, 15000)
+
+function startGame() {
+  if (gameOver.value) return // Don't start a new game until 1 second after game over
+
+  active.value = true
+  random()
+
+  // Reset stats for new game
+  missed.value = 0
+  clicked.value = 0
+  gameOver.value = false // Reset the game over flag
+
+  setTimeout(() => {
+    active.value = false
+
+    // Store the attempt number and accuracy when the game ends
+    history.attempt = attempt.value
+    history.accuracy = ((clicked.value / (clicked.value + missed.value)) * 100).toFixed(1)
+
+    // Increment attempt for the next game
+    attempt.value++
+
+    // Set game over flag and delay before allowing another game start
+    gameOver.value = true
+    setTimeout(() => {
+      gameOver.value = false // After 1 second, allow starting a new game
+    }, 3000) // 1 second delay
+  }, 15000)
+}
 </script>
 
 <style scoped>
 .game {
   width: 85%;
-  background-color: rgb(186, 255, 232);
 }
 .contains {
   height: 100%;
+  position: relative;
+}
+.scores {
+  width: 15%;
+  border-left: 1px solid var(--color-border);
+  text-align: center;
 }
 .start {
+  position: relative;
   height: 100%;
   width: 100%;
   z-index: 11;

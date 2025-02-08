@@ -1,32 +1,50 @@
 <script setup>
 import AimPractice from '@/components/AimPractice.vue'
 import ReactionTest from '@/components/ReactionTest.vue'
-
-// const toggle = true
-// const togle = false
+import { ref } from 'vue'
+const toggle = ref(true)
+const togle = ref(false)
 //@click="toggle = !toggle"
 </script>
 
 <template>
   <div class="main">
-    <div class="nav">
-      <button><h3>Aim Test</h3></button>
-      <button><h3>Reaction Test</h3></button>
-    </div>
+    <nav>
+      <a @click="((toggle = true), (togle = false))"><h3>Aim Test</h3></a>
+      <a @click="((toggle = false), (togle = true))"><h3>Reaction Test</h3></a>
+    </nav>
     <div class="center">
-      <AimPractice />
-      <ReactionTest />
-      <div class="scores">High Scores</div>
+      <AimPractice v-if="toggle" />
+      <ReactionTest v-if="togle" />
     </div>
   </div>
 </template>
 
 <style scoped>
-.nav {
+a:hover {
+  cursor: pointer;
+}
+nav a.active {
+  color: var(--color-text);
+}
+
+nav a {
+  display: inline-block;
+  padding: 0 1rem;
+  border-left: 1px solid var(--color-border);
+  width: 13%;
+}
+
+nav a:first-of-type {
+  border: 0;
+}
+
+nav {
   width: 100%;
   text-align: center;
   font-size: 1rem;
   padding: 1rem 0;
+  border-bottom: 1px solid var(--color-border);
 }
 .top {
   display: inline-block;
@@ -49,7 +67,7 @@ import ReactionTest from '@/components/ReactionTest.vue'
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: rgb(0, 189, 126);
+  background-color: rgba(0, 189, 126, 0.11);
 }
 
 .center {
@@ -58,9 +76,5 @@ import ReactionTest from '@/components/ReactionTest.vue'
   display: flex;
   flex-direction: row;
   /* align-items: stretch; Make the child elements stretch to take the full height */
-}
-.scores {
-  width: 15%;
-  background-color: rgb(67, 247, 187);
 }
 </style>
