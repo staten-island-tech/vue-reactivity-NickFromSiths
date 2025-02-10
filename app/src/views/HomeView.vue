@@ -24,6 +24,7 @@ const togle = ref(false)
 a:hover {
   cursor: pointer;
 }
+
 nav a.active {
   color: var(--color-text);
 }

@@ -2,8 +2,8 @@
   <div class="game">
     <div class="contains">
       <div v-if="!active" class="start" @click="startGame">
-        <h1 v-if="!history.attempt">Click to Start</h1>
-        <h1 v-if="history.attempt">
+        <h1 class="center" v-if="!history.attempt">Click to Start</h1>
+        <h1 class="center" v-if="history.attempt">
           Attempt:{{ history.attempt }} Accuracy:{{ history.accuracy }}
         </h1>
       </div>
@@ -23,7 +23,16 @@
       </div>
     </div>
   </div>
-  <div class="scores"><h3>High Scores</h3></div>
+  <div class="scores">
+    <h3>High Scores</h3>
+    <div>
+      <ul>
+        <li v-for="entry in historyArray" :key="entry">
+          Attempt: {{ entry.attempt }} Accuracy: {{ entry.accuracy }}%
+        </li>
+      </ul>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -34,6 +43,7 @@ let clicked = ref(0)
 let randomX = null
 let randomY = null
 let active = ref(false)
+let historyArray = []
 const history = reactive({ attempt: null, accuracy: null }) // Null to check before game starts
 let attempt = ref(1)
 let gameOver = ref(false) // Prevent restart before 1 second
@@ -66,6 +76,7 @@ function startGame() {
     // Store the attempt number and accuracy when the game ends
     history.attempt = attempt.value
     history.accuracy = ((clicked.value / (clicked.value + missed.value)) * 100).toFixed(1)
+    historyArray.push({ attempt: history.attempt, accuracy: history.accuracy })
 
     // Increment attempt for the next game
     attempt.value++
@@ -87,10 +98,22 @@ function startGame() {
   height: 100%;
   position: relative;
 }
+.center {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  color: rgba(0, 189, 126, 0.57);
+  height: 100%;
+  align-items: center;
+}
 .scores {
   width: 15%;
   border-left: 1px solid var(--color-border);
   text-align: center;
+}
+ul {
+  list-style-type: none;
+  padding: 0%;
 }
 .start {
   position: relative;
@@ -108,12 +131,14 @@ function startGame() {
   margin: 0rem 2rem 0rem 2rem;
 }
 .aim {
+  border: 0;
   position: relative;
   width: 3rem;
   height: 3rem;
   border-radius: 100%;
   z-index: 10;
   transition: 0.5s;
+  background-color: rgba(0, 189, 126, 0.37);
 }
 .offset {
   margin: 0.5rem;
