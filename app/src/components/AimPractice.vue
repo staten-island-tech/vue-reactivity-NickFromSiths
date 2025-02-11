@@ -137,7 +137,7 @@ ul {
   height: 3rem;
   border-radius: 100%;
   z-index: 10;
-  transition: 0.5s;
+  transition: 0.3s;
   background-color: rgba(0, 189, 126, 0.37);
 }
 .offset {
