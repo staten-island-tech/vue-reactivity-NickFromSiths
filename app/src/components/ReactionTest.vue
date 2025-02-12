@@ -1,11 +1,14 @@
 <template>
   <div class="game">
     <div v-if="!active" class="start" @click="startGame">
-      <h1 class="center" v-if="!history.attempt">Click to Start Reaction</h1>
-      <h1 class="center" v-if="history.attempt">
-        Attempt:{{ history.attempt }} MS:{{ history.ms }}
-      </h1>
+      <div class="height">
+        <h1 class="center" v-if="!history.attempt">Click to Start Reaction</h1>
+        <h1 class="center" v-if="history.attempt">
+          Attempt:{{ history.attempt }} MS:{{ history.ms }}
+        </h1>
+      </div>
     </div>
+
     <div class="offset" v-if="active" @click=""></div>
   </div>
   <div class="scores">
@@ -37,33 +40,28 @@ function random() {
 function startGame() {
   if (gameOver.value) return
 
-  active.value = true
-
   gameOver.value = false
+  random()
 
   setTimeout(() => {
-    active.value = false
+    active.value = true
 
     history.attempt = attempt.value
-
     history.ms = ms.toFixed(1)
     historyArray.push({ attempt: history.attempt, ms: history.ms })
-
     attempt.value++
 
     gameOver.value = true
     setTimeout(() => {
       gameOver.value = false
-    }, randomTime) // randomTime delay
-  }, 15000)
+    }, 3000) // randomTime delay
+  }, randomTime)
 }
 </script>
 
 <style scoped>
 .game {
   width: 85%;
-  height: 100%;
-  position: relative;
 }
 .center {
   display: flex;
@@ -88,28 +86,13 @@ ul {
   width: 100%;
   z-index: 11;
 }
-.stats {
-  height: 1.4rem;
-  display: flex;
-  flex-direction: row;
-  place-content: center;
-}
-.stat {
-  margin: 0rem 2rem 0rem 2rem;
-}
-.aim {
-  border: 0;
-  position: relative;
-  width: 3rem;
-  height: 3rem;
-  border-radius: 100%;
-  z-index: 10;
-  transition: 0.3s;
-  background-color: rgba(0, 189, 126, 0.37);
-}
 .offset {
   width: 100%;
   height: 100%;
   z-index: 1;
+  background-color: rgba(0, 189, 126, 0.37);
+}
+.height {
+  height: 100%;
 }
 </style>
