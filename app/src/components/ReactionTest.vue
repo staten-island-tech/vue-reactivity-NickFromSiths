@@ -1,6 +1,6 @@
 <template>
   <div class="game">
-    <div v-if="!active" class="start" @click="startGame">
+    <div v-if="!active" class="start" @click="(startGame, i++, console.log('y'))">
       <div class="height">
         <h1 class="center" v-if="!history.attempt">Click to Start Reaction</h1>
         <h1 class="center" v-if="history.attempt">
@@ -52,6 +52,8 @@ function random() {
   randomTime = Math.random() * 7
 }
 
+let i = 0
+
 function startGame() {
   if (gameOver.value) return
 
@@ -59,13 +61,8 @@ function startGame() {
   random()
   console.log(randomTime)
   setTimeout(() => {
-    // randomTime delay
     startTimer()
-    // setTimeout(() => {
-    //   stopTimer()
-    //   active.value = false
-    //   console.log('Too slow!')
-    // }, 5000)
+
     active.value = true
 
     history.attempt = attempt.value
