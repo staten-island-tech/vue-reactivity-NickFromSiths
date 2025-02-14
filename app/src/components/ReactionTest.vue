@@ -1,6 +1,6 @@
 <template>
   <div class="game">
-    <div v-if="!active" class="start" @click="(startGame, i++, console.log('y'))">
+    <div v-if="!active" class="start" @click="(startGame(), i++, console.log(i))">
       <div class="height">
         <h1 class="center" v-if="!history.attempt">Click to Start Reaction</h1>
         <h1 class="center" v-if="history.attempt">
@@ -36,6 +36,7 @@ let attempt = ref(1)
 let gameOver = ref(false)
 let elapsedTime = ref(0)
 let timerInterval
+let i = ref(0)
 
 function startTimer() {
   timerInterval = setInterval(() => {
@@ -52,10 +53,9 @@ function random() {
   randomTime = Math.random() * 7
 }
 
-let i = 0
-
 function startGame() {
-  if (gameOver.value) return
+  console.log('WHY')
+  if (gameOver.value && i === 1) return
 
   gameOver.value = false
   random()
@@ -73,6 +73,7 @@ function startGame() {
     gameOver.value = true
     setTimeout(() => {
       gameOver.value = false
+      i = 0
     }, 3000)
   }, randomTime * 1000)
 }
