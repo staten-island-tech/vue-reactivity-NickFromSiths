@@ -9,7 +9,7 @@
       </div>
     </div>
 
-    <div class="offset" v-if="active" @click="(stopTimer, (active = false))">
+    <div class="offset" v-if="active" @click="(stopTimer(), (active = false))">
       <h1>{{ elapsedTime }}</h1>
     </div>
   </div>
@@ -28,7 +28,6 @@
 <script setup>
 import { ref, reactive } from 'vue'
 let randomTime = null
-let ms = ref(0)
 let active = ref(false)
 let historyArray = []
 const history = reactive({ attempt: null, ms: null })
@@ -36,7 +35,7 @@ let attempt = ref(1)
 let gameOver = ref(false)
 let elapsedTime = ref(0)
 let timerInterval
-let i = ref(0)
+let i = 0
 
 function startTimer() {
   timerInterval = setInterval(() => {
@@ -50,32 +49,31 @@ function stopTimer() {
 }
 
 function random() {
-  randomTime = Math.random() * 7
+  randomTime = Math.random() * 5
 }
 
 function startGame() {
-  console.log('WHY')
-  if (gameOver.value && i === 1) return
-
-  gameOver.value = false
-  random()
-  console.log(randomTime)
-  setTimeout(() => {
-    startTimer()
-
-    active.value = true
-
-    history.attempt = attempt.value
-    history.ms = ms.toFixed(1)
-    historyArray.push({ attempt: history.attempt, ms: history.ms })
-    attempt.value++
-
-    gameOver.value = true
+  if (gameOver.value) return
+  if (i === 0) {
+    gameOver.value = false
+    random()
+    console.log(randomTime)
     setTimeout(() => {
-      gameOver.value = false
-      i = 0
-    }, 3000)
-  }, randomTime * 1000)
+      active.value = true
+      startTimer()
+
+      history.attempt = attempt.value
+
+      history.ms = elapsedTime.value.toFixed(1)
+      historyArray.push({ attempt: history.attempt, ms: history.ms })
+      attempt.value++
+      gameOver.value = true
+      setTimeout(() => {
+        gameOver.value = false
+        i = 0
+      }, 3000)
+    }, randomTime * 1000)
+  }
 }
 </script>
 
