@@ -4,7 +4,7 @@
       <div v-if="!active" class="start" @click="startGame">
         <h1 class="center" v-if="!history.attempt">Click to Start</h1>
         <h1 class="center" v-if="history.attempt">
-          Attempt:{{ history.attempt }} Accuracy:{{ history.accuracy }}
+          Attempt: {{ history.attempt }} Accuracy: {{ history.accuracy }}%
         </h1>
       </div>
       <div class="stats" v-if="active">

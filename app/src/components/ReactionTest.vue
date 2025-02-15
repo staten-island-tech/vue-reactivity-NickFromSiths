@@ -3,14 +3,12 @@
     <div v-if="!active" class="start" @click="(startGame(), i++, console.log(i))">
       <div class="height">
         <h1 class="center" v-if="!history.attempt">Click to Start Reaction</h1>
-        <h1 class="center" v-if="history.attempt">
-          Attempt:{{ history.attempt }} MS:{{ history.ms }}
-        </h1>
+        <h1 class="center" v-if="history.attempt">Attempt:{{ history.attempt }} MS:{{ ms }}</h1>
       </div>
     </div>
 
-    <div class="offset" v-if="active" @click="(stopTimer(), (active = false))">
-      <h1>{{ elapsedTime }}</h1>
+    <div class="offset" v-if="active" @click="stopGame()">
+      <h1></h1>
     </div>
   </div>
   <div class="scores">
@@ -18,7 +16,7 @@
     <div>
       <ul>
         <li v-for="entry in historyArray" :key="entry">
-          Attempt: {{ entry.attempt }} MS: {{ entry.accuracy }}%
+          Attempt: {{ entry.attempt }} MS: {{ entry.ms }}
         </li>
       </ul>
     </div>
@@ -33,23 +31,27 @@ let historyArray = []
 const history = reactive({ attempt: null, ms: null })
 let attempt = ref(1)
 let gameOver = ref(false)
-let elapsedTime = ref(0)
-let timerInterval
+// let elapsedTime = null
+// let timerInterval
+let ms = null
+let begin = null
+let end = null
+
 let i = 0
 
-function startTimer() {
-  timerInterval = setInterval(() => {
-    elapsedTime++ // Increment elapsed time by 1ms every interval
-    console.log(elapsedTime, 'timer') // Log the elapsed time in ms
-  }, 1) // Update every 1ms
-}
+// function startTimer() {
+//   timerInterval = setInterval(() => {
+//     elapsedTime++ // Increment elapsed time by 1ms every interval
+//     console.log(elapsedTime, 'timer') // Log the elapsed time in ms
+//   }, 1) // Update every 1ms
+// }
 
-function stopTimer() {
-  clearInterval(timerInterval)
-}
+// function stopTimer() {
+//   clearInterval(timerInterval)
+// }
 
 function random() {
-  randomTime = Math.random() * 5
+  randomTime = Math.random() * 3 + 1
 }
 
 function startGame() {
@@ -60,20 +62,28 @@ function startGame() {
     console.log(randomTime)
     setTimeout(() => {
       active.value = true
-      startTimer()
+      begin = Date.now()
 
-      history.attempt = attempt.value
-
-      history.ms = elapsedTime.value.toFixed(1)
-      historyArray.push({ attempt: history.attempt, ms: history.ms })
-      attempt.value++
-      gameOver.value = true
       setTimeout(() => {
         gameOver.value = false
         i = 0
+        attempt.value++
       }, 3000)
     }, randomTime * 1000)
   }
+  // if (i > 1) {
+  //   console.log('too early!')
+  //   gameOver.value = true
+  // }
+}
+function stopGame() {
+  end = Date.now()
+  active.value = false
+  ms = end - begin
+  history.attempt = attempt.value
+  console.log('beginning', begin, 'ending', end)
+  historyArray.push({ attempt: attempt.value, ms: ms })
+  gameOver.value = false
 }
 </script>
 
