@@ -1,14 +1,25 @@
 <template>
   <div class="game">
-    <div v-if="!active" class="start" @click="(startGame(), i++, console.log(i))">
-      <div class="height">
-        <h1 class="center" v-if="!history.attempt">Click to Start Reaction</h1>
-        <h1 class="center" v-if="history.attempt">Attempt:{{ history.attempt }} MS:{{ ms }}</h1>
+    <div v-if="!active" class="start">
+      <div v-if="!click" class="start" @click="i++">
+        <div class="height">
+          <h1 class="center" v-if="!history.attempt" @click="(startGame(), (click = true))">
+            Click to Start Reaction
+          </h1>
+          <h1 class="center" v-if="history.attempt" @click="(startGame(), (click = true))">
+            Attempt:{{ history.attempt }} MS:{{ ms }}
+          </h1>
+        </div>
+      </div>
+      <div v-if="click" class="start" @click="cancel()">
+        <h1>Wait for green</h1>
       </div>
     </div>
 
-    <div class="offset" v-if="active" @click="stopGame()">
-      <h1></h1>
+    <div class="offset" v-if="active">
+      <div class="offset" v-if="!click" @click="stopGame()">
+        <h1></h1>
+      </div>
     </div>
   </div>
   <div class="scores">
@@ -37,8 +48,10 @@ let ms = null
 let begin = null
 let end = null
 
+let click = ref(false)
 let i = 0
 
+let startGameTimeout
 // function startTimer() {
 //   timerInterval = setInterval(() => {
 //     elapsedTime++ // Increment elapsed time by 1ms every interval
@@ -56,20 +69,22 @@ function random() {
 
 function startGame() {
   if (gameOver.value) return
-  if (i === 0) {
+  console.log('starting')
+  while (i === 0) {
     gameOver.value = false
     random()
     console.log(randomTime)
-    setTimeout(() => {
+    startGameTimeout = setTimeout(() => {
       active.value = true
       begin = Date.now()
-
+      click.value = false
       setTimeout(() => {
         gameOver.value = false
         i = 0
         attempt.value++
       }, 3000)
     }, randomTime * 1000)
+    break
   }
   // if (i > 1) {
   //   console.log('too early!')
@@ -81,9 +96,16 @@ function stopGame() {
   active.value = false
   ms = end - begin
   history.attempt = attempt.value
-  console.log('beginning', begin, 'ending', end)
+  // console.log('beginning', begin, 'ending', end)
   historyArray.push({ attempt: attempt.value, ms: ms })
   gameOver.value = false
+}
+function cancel() {
+  console.log('canceling')
+  active.value = false
+  click.value = false
+  clearTimeout(startGameTimeout)
+  i = 0
 }
 </script>
 
