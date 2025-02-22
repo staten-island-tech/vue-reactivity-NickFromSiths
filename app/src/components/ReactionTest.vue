@@ -12,7 +12,7 @@
         </div>
       </div>
       <div v-if="click" class="start" @click="cancel()">
-        <h1 class="center">Wait for green</h1>
+        <h1 class="center font">Wait for green</h1>
       </div>
     </div>
 
@@ -69,7 +69,7 @@ function random() {
 
 function startGame(x) {
   if (gameOver.value) return
-  console.log('WORKS')
+  // console.log('WORKS')
 
   if (x === true) {
     if (i === 0) {
@@ -90,19 +90,17 @@ function startGame(x) {
   }
 
   if (x === false) {
-    console.log('DOES TIS WORK   ', 'i =', i)
+    // console.log('DOES TIS WORK   ', 'i =', i)
     if (i === 0) {
       setTimeout(() => {
         click.value = true
-
-        console.log(i, 'WHY NO WORKKK')
-
+        // console.log(i, 'WHY NO WORKKK')
         gameOver.value = false
         random()
 
         console.log(randomTime)
         i++
-        console.log(i)
+        // console.log(i)
         startGameTimeout = setTimeout(() => {
           active.value = true
           begin = Date.now()
@@ -174,5 +172,8 @@ ul {
 }
 .height {
   height: 100%;
+}
+.font {
+  font-size: 37px;
 }
 </style>
