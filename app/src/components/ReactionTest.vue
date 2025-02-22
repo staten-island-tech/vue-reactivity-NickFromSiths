@@ -3,16 +3,16 @@
     <div v-if="!active" class="start">
       <div v-if="!click" class="start" @click="i++">
         <div class="height">
-          <h1 class="center" v-if="!history.attempt" @click="(startGame(), (click = true))">
+          <h1 class="center" v-if="!history.attempt" @click="(startGame(true), (click = true))">
             Click to Start Reaction
           </h1>
-          <h1 class="center" v-if="history.attempt" @click="(startGame(), (click = true))">
-            Attempt:{{ history.attempt }} MS:{{ ms }}
+          <h1 class="center" v-if="history.attempt" @click="startGame(false)">
+            Attempt: {{ history.attempt }} MS: {{ ms }}
           </h1>
         </div>
       </div>
       <div v-if="click" class="start" @click="cancel()">
-        <h1>Wait for green</h1>
+        <h1 class="center">Wait for green</h1>
       </div>
     </div>
 
@@ -67,24 +67,54 @@ function random() {
   randomTime = Math.random() * 3 + 1
 }
 
-function startGame() {
+function startGame(x) {
   if (gameOver.value) return
-  console.log('starting')
-  while (i === 0) {
-    gameOver.value = false
-    random()
-    console.log(randomTime)
-    startGameTimeout = setTimeout(() => {
-      active.value = true
-      begin = Date.now()
-      click.value = false
+  console.log('WORKS')
+
+  if (x === true) {
+    if (i === 0) {
+      gameOver.value = false
+      random()
+      console.log(randomTime)
+      startGameTimeout = setTimeout(() => {
+        active.value = true
+        begin = Date.now()
+        click.value = false
+        setTimeout(() => {
+          gameOver.value = false
+          i = 0
+          attempt.value++
+        }, 3000)
+      }, randomTime * 1000)
+    }
+  }
+
+  if (x === false) {
+    console.log('DOES TIS WORK   ', 'i =', i)
+    if (i === 0) {
       setTimeout(() => {
+        click.value = true
+
+        console.log(i, 'WHY NO WORKKK')
+
         gameOver.value = false
-        i = 0
-        attempt.value++
-      }, 3000)
-    }, randomTime * 1000)
-    break
+        random()
+
+        console.log(randomTime)
+        i++
+        console.log(i)
+        startGameTimeout = setTimeout(() => {
+          active.value = true
+          begin = Date.now()
+          click.value = false
+          setTimeout(() => {
+            gameOver.value = false
+            i = 0
+            attempt.value++
+          }, 3000)
+        }, randomTime * 1000)
+      }, 1000)
+    }
   }
   // if (i > 1) {
   //   console.log('too early!')
@@ -101,7 +131,7 @@ function stopGame() {
   gameOver.value = false
 }
 function cancel() {
-  console.log('canceling')
+  console.log('canceling', 'i =', i)
   active.value = false
   click.value = false
   clearTimeout(startGameTimeout)
